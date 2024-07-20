@@ -10,14 +10,16 @@ apt-get -y install haproxy
 # edit config file
 server_config=\
 "
-frontend loraine-frontend
-        bind *:80
-        mode http
-        default_backend loraine-backend
-backend loraine-backend
-        balance roundrobin
-        server 6238-web-01 54.196.216.8:80 check
-        server 6238-web-02 98.80.15.59:80 check
+frontend mueni-frontend
+    bind *:80
+    mode http
+    default_backend loraine-backend
+
+backend mueni-backend
+    balance roundrobin
+    server 6190-web-01 3.80.53.53 check
+    server 6190-web-02 54.89.187.187 check
+
 "
 echo "$server_config" | sudo tee -a /etc/haproxy/haproxy.cfg
 
