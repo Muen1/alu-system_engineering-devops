@@ -2,16 +2,23 @@
 # This script installs Nginx, configures a custom 404 page, and restarts the server.
 
 # Install Nginx
-apt-get update -y
-apt-get install nginx -y
+sudo apt-get update -y
+sudo apt-get install nginx -y
 
 # Create a custom 404 page
-echo "Ceci n'est pas une page" > /var/www/html/404.html
+echo "Ceci n'est pas une page" | sudo tee /var/www/html/404.html > /dev/null
+
+# Backup the original Nginx configuration file
+sudo cp /etc/nginx/sites-available/default /etc/nginx/sites-available/default.bak
 
 # Update Nginx configuration to use the custom 404 page
-sed -i '/^\tlocation \/ {/ a\\n\t\t# Custom 404 error page\n\t\terror_page 404 /404.html;\n\t\tlocation = /404.html {\n\t\t\tinternal;\n\t\t}' /etc/nginx/sites-available/default
+sudo sed -i '/^\tlocation \/ {/a \\n\t\t# Custom 404 error page\n\t\terror_page 404 /404.html;\n\t\tlocation = /404.html {\n\t\t\tinternal;\n\t\t}' /etc/nginx/sites-available/default
 
-# Restart Nginx
-service nginx restart
+# Test Nginx configuration for syntax errors
+sudo nginx -t
+
+# Restart Nginx to apply changes
+sudo systemctl restart nginx
 
 exit 0
+
