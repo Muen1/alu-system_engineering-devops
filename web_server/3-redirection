@@ -1,12 +1,39 @@
 #!/usr/bin/env bash
 # Script that configures a new Ubuntu machine with the following requirements:
 
+# Update package list and install Nginx
 sudo apt-get update
 sudo apt-get -y install nginx
+
+# Allow Nginx through the firewall
 sudo ufw allow 'Nginx HTTP'
+
+# Create a sample HTML file
 echo "This is Mueni from Holberton School :)" | sudo tee /var/www/html/index.html > /dev/null
 
-string_for_replacement="server_name _;\n\trewrite ^\/redirect_me https:\/\/www.github.com\/Muen1 permanent;"
-sudo sed -i "s/server_name _;/$string_for_replacement/" /etc/nginx/sites-enabled/default
+# Backup the original Nginx configuration file
+sudo cp /etc/nginx/sites-available/default /etc/nginx/sites-available/default.bak
 
-sudo service nginx restart
+# Configure Nginx to redirect /redirect_me
+sudo tee /etc/nginx/sites-available/default > /dev/null <<EOL
+server {
+    listen 80;
+    server_name _;
+
+    location / {
+        root /var/www/html;
+        index index.html index.htm;
+    }
+
+    location /redirect_me {
+        return 301 https://www.github.com/Muen1;
+    }
+}
+EOL
+
+# Test Nginx configuration for syntax errors
+sudo nginx -t
+
+# Reload Nginx to apply changes
+sudo systemctl reload nginx
+
