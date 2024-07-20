@@ -13,7 +13,7 @@ server_config=\
 frontend mueni-frontend
     bind *:80
     mode http
-    default_backend loraine-backend
+    default_backend mueni-backend
 
 backend mueni-backend
     balance roundrobin
