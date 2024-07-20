@@ -1,8 +1,22 @@
-#!/usr/bin/env bash
-# Installs nginx server
+#!/bin/bash
 
-sudo apt-get update
-sudo apt-get -y install nginx
-sudo ufw allow 'Nginx HTTP'
-sudo echo "This is Nigel from Holberton School :)" > /var/www/html/index.html
-sudo service nginx start
+# Update package list and install nginx
+sudo apt-get update -y
+sudo apt-get install nginx -y
+
+# Create a simple HTML page with the required content
+echo "Holberton School for the win!" | sudo tee /var/www/html/index.html
+
+# Ensure Nginx is listening on port 80 (default behavior)
+# Restart nginx without using systemctl
+sudo service nginx restart
+
+# Check if Nginx is running and configured properly
+curl localhost | grep "Holberton School" > /dev/null
+
+if [ $? -eq 0 ]; then
+  echo "Nginx is installed and configured correctly."
+else
+  echo "Nginx configuration failed."
+fi
+
