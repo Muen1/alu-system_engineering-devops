@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env bash
+# This script installs Nginx on an Ubuntu server and configures it to meet the specified requirements.
 
 # Update package list and install Nginx
 sudo apt-get update -y
@@ -11,7 +12,7 @@ echo "Holberton School for the win!" | sudo tee /var/www/html/index.html
 sudo service nginx restart
 
 # Check if Nginx is running and configured properly
-curl localhost | grep "Holberton School" > /dev/null
+curl -s localhost | grep "Holberton School" > /dev/null
 
 if [ $? -eq 0 ]; then
   echo "Nginx is installed and configured correctly."
