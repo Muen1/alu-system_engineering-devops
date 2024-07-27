@@ -1,15 +1,22 @@
 #!/usr/bin/env bash
-#Installing Nginx on Ubuntu
-#Nginx is listening on port 80
-#The GET request should return a page containing "Holberton School"
+# This script installs Nginx on an Ubuntu server and configures it to return a custom page at the root.
 
-sudo apt-get update && upgrade
+# Update package list and install Nginx
+sudo apt-get update -y
 sudo apt-get install nginx -y
 
-#Create a directory called html inside your nginx server
-sudo mkdir /var/www/html
-#Create a file inside that directory called index.html
-sudo touch /var/www/html/index.html
-#Display your message then
-sudo echo "Holberton School" > /var/www/html/index.html
+# Create a simple HTML page with the desired content
+echo "Holberton School for the win!" | sudo tee /var/www/html/index.html
+
+# Ensure Nginx is listening on port 80 (default behavior)
 sudo service nginx restart
+
+# Check if Nginx is running and configured properly
+curl -s localhost | grep -q "Holberton School"
+
+if [ $? -eq 0 ]; then
+  echo "Nginx is installed and configured correctly."
+else
+  echo "Nginx configuration failed."
+fi
+
